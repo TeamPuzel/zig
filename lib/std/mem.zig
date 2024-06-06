@@ -652,6 +652,16 @@ pub fn eqlSentinel(comptime T: type, comptime as: T, comptime bs: T, a: [*:as]co
     }
 }
 
+test eqlSentinel {
+    const abc: [*:0]const u8 = &"abc".*;
+    const abcd: [*:0]const u8 = &"abcd".*;
+    const aab: [*:0]const u8 = &"aab".*;
+    
+    try testing.expect(eqlSentinel(u8, 0, 0, abc, abc));
+    try testing.expect(!eqlSentinel(u8, 0, 0, abc, abcd));
+    try testing.expect(!eqlSentinel(u8, 0, 0, abc, aab));
+}
+
 /// Compares two slices and returns whether they are equal.
 pub fn eql(comptime T: type, a: []const T, b: []const T) bool {
     if (@sizeOf(T) == 0) return true;
