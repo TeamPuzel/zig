@@ -643,6 +643,15 @@ const backend_can_use_eql_bytes = switch (builtin.zig_backend) {
     else => true,
 };
 
+/// Compares two sentinel pointers and returns whether they are equal.
+pub fn eqlSentinel(comptime T: type, comptime as: T, comptime bs: T, a: [*:as]const T, b: [*:bs]const T) bool {
+    var i: usize = 0; while (true) : (i += 1) {
+        if (a[i] == as and b[i] == bs) return true
+        else if (a[i] == as or b[i] == bs) return false
+        else if (a[i] != b[i]) return false;
+    }
+}
+
 /// Compares two slices and returns whether they are equal.
 pub fn eql(comptime T: type, a: []const T, b: []const T) bool {
     if (@sizeOf(T) == 0) return true;
